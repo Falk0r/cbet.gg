@@ -1,0 +1,20 @@
+{
+
+    "manifest_version": 2,
+    "name": "Cbet Extension",
+    "version": "1.0",
+  
+    "description": "Transmet le bet sur bet-analytix",
+  
+    "icons": {
+      "21": "icons/icon-21.svg"
+    },
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*.cbet.gg/*","*://*.app.bet-analytix.com/*"],
+        "js": ["cbets.js"]
+      }
+    ]
+  
+  }
