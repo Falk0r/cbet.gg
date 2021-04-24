@@ -54,7 +54,7 @@ function betAnalytix() {
     const result = url.searchParams?.get("result");
     const pick = url.searchParams?.get("pick");
 
-    let init = setInterval(clickForm, 500);
+    let init = name ? setInterval(clickForm, 500) : null;
 
     function clickForm() {
         console.log("dans la boucle");
