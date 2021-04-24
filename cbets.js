@@ -1,10 +1,12 @@
-
-const path = window.location.hostname;
-if (path == "app.bet-analytix.com") {
-    betAnalytix();
-} else {
-    cbet();
+window.onload = () => {
+    const path = window.location.hostname;
+    if (path === "app.bet-analytix.com") {
+        betAnalytix();
+    } else {
+        cbet();
+    }
 }
+
 function cbet() {
     let init = setInterval(getIframe, 1000);
     
@@ -40,47 +42,47 @@ function cbet() {
 }
 
 function betAnalytix() {
-    window.onload = function() {
-        const url_string = window.location.href;
-        const url = new URL(url_string);
-        const name = url.searchParams.get("name");
-        const odd = url.searchParams.get("odd");
-        const bet = url.searchParams.get("bet");
+    const url_string = window.location.href;
+    const url = new URL(url_string);
+    const name = url.searchParams?.get("name");
+    const odd = url.searchParams?.get("odd");
+    const bet = url.searchParams?.get("bet");
 
-        let init = setInterval(clickForm, 500);
+    let init = setInterval(clickForm, 500);
 
-        function clickForm() {
-            const flexboxes = document.querySelector("div.rounded-lg.shadow-lg.bg-white.mb-4.p-5.flex.flex-1.items-center.overflow-hidden.cursor-pointer");
-            if (flexboxes) {
-                clearInterval(init);
-                flexboxes.click();
-                setTimeout(() => {getForm(name, odd, bet)}, 1000);
-            }   
-        }
+    function clickForm() {
+        console.log("dans la boucle");
+        const flexboxes = document.querySelector("div.rounded-lg.shadow-lg.bg-white.mb-4.p-5.flex.flex-1.items-center.overflow-hidden.cursor-pointer");
+        if (flexboxes) {
+            clearInterval(init);
+            flexboxes.click();
+            setTimeout(() => {getForm(name, odd, bet)}, 1000);
+        }   
+    }
 
-        function getForm(name, odd, bet) {
-            const form = document.querySelector("form");
-            const inputs = form.querySelectorAll('input');
-            const selects = form.querySelectorAll('select');
-            let selectBookmaker = selects[1];
-            selectBookmaker.value = "132";
-            selectBookmaker.dispatchEvent(new Event('change'));
-            let selectSport = selects[3];
-            selectSport.value = "21";
-            selectSport.dispatchEvent(new Event('change'));
-            let selectName = inputs[1];
-            selectName.value = name;
-            selectName.dispatchEvent(new Event('input'));
-            let selectOdd = inputs[2];
-            selectOdd.value = odd;
-            selectOdd.dispatchEvent(new Event('input'));
-            let selectBet = inputs[3];
-            selectBet.value = bet;
-            selectBet.dispatchEvent(new Event('input'));
-            setTimeout(()=>{
-                const button = form.querySelector("button");
-                button.click();
-            }, 1000);
-        }
+    function getForm(name, odd, bet) {
+        const form = document.querySelector("form");
+        const inputs = form.querySelectorAll('input');
+        const selects = form.querySelectorAll('select');
+        console.log(selects);
+        let selectBookmaker = selects[1];
+        selectBookmaker.value = "132";
+        selectBookmaker.dispatchEvent(new Event('change'));
+        let selectSport = selects[2];
+        selectSport.value = "21";
+        selectSport.dispatchEvent(new Event('change'));
+        let selectName = inputs[1];
+        selectName.value = name;
+        selectName.dispatchEvent(new Event('input'));
+        let selectOdd = inputs[2];
+        selectOdd.value = odd;
+        selectOdd.dispatchEvent(new Event('input'));
+        let selectBet = inputs[3];
+        selectBet.value = bet;
+        selectBet.dispatchEvent(new Event('input'));
+        setTimeout(()=>{
+            const button = form.querySelector("button");
+            button.click();
+        }, 1000);
     }
 }
