@@ -33,7 +33,11 @@ function cbet() {
                     const odd = betInfo[4].textContent;
                     let bet = betBet[0].textContent;
                     bet = bet.split(" ")[1];
-                    const url = `https://app.bet-analytix.com/addbet/2?name=${name}&odd=${odd}&bet=${bet}`;
+                    const oddInfo = betInfo[3].querySelectorAll("div");
+                    const oddResult = oddInfo[0].innerText;
+                    const oddPick = oddInfo[1].querySelectorAll("span")[1].innerText;
+                    console.log(oddResult, oddPick);
+                    const url = `https://app.bet-analytix.com/addbet/2?name=${name}&odd=${odd}&bet=${bet}&result=${oddResult}&pick=${oddPick}`;
                     window.open(url);
                 })
             })
@@ -47,6 +51,8 @@ function betAnalytix() {
     const name = url.searchParams?.get("name");
     const odd = url.searchParams?.get("odd");
     const bet = url.searchParams?.get("bet");
+    const result = url.searchParams?.get("result");
+    const pick = url.searchParams?.get("pick");
 
     let init = setInterval(clickForm, 500);
 
@@ -72,7 +78,7 @@ function betAnalytix() {
         selectSport.value = "21";
         selectSport.dispatchEvent(new Event('change'));
         let selectName = inputs[1];
-        selectName.value = name;
+        selectName.value = `${name} | ${result} | Pick : ${pick}`;
         selectName.dispatchEvent(new Event('input'));
         let selectOdd = inputs[2];
         selectOdd.value = odd;
@@ -82,7 +88,7 @@ function betAnalytix() {
         selectBet.dispatchEvent(new Event('input'));
         setTimeout(()=>{
             const button = form.querySelector("button");
-            button.click();
+            // button.click();
         }, 1000);
     }
 }
