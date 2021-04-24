@@ -88,7 +88,7 @@ function betAnalytix() {
         selectBet.dispatchEvent(new Event('input'));
         setTimeout(()=>{
             const button = form.querySelector("button");
-            // button.click();
+            button.click();
         }, 1000);
     }
 }
