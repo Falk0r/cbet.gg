@@ -12,7 +12,7 @@
   
     "content_scripts": [
       {
-        "matches": ["*://*.cbet.gg/*","*://*.app.bet-analytix.com/*"],
+        "matches": ["*://*.cbet4.gg/*","*://*.app.bet-analytix.com/*"],
         "js": ["cbets.js"]
       }
     ]

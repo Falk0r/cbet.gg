@@ -15,6 +15,7 @@ function cbet() {
         iframe = iframe.contentWindow.document;
         let historyButton = iframe.querySelector(".bet-history");
         if (historyButton) {
+            console.log(historyButton);
             clearInterval(init);
             historyButton.addEventListener("click", ()=>{
                 let title = iframe.querySelector(".popup-title");
