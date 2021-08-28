@@ -9,6 +9,8 @@ window.onload = () => {
 
 function cbet() {
     let init = setInterval(getIframe, 1000);
+
+    amountToBet();
     
     function getIframe(){
         let iframe = document.getElementsByTagName("iframe")[0];
@@ -91,5 +93,28 @@ function betAnalytix() {
             const button = form.querySelector("button");
             button.click();
         }, 1000);
+    }
+}
+
+function amountToBet() {
+    const amount = getBalance();
+    const userInfo = document.querySelector(".user-info ul");
+    console.log("userInfo", userInfo);
+    if (userInfo) {
+        let li = document.createElement("li");
+        li.classList.add("username");
+        li.style.color = "white";
+        li.innerHTML = `<span>Bet : </span><span class="amount">${(amount * 0.05).toFixed(2)}</span>`;
+        userInfo.insertBefore(li, userInfo.firstChild);
+    }
+}
+
+function getBalance() {
+    const balance = document.querySelector(".balance .amount");
+    console.log("balance", balance);
+    if (balance) {
+        const balanceAmount = parseFloat(balance.textContent);
+        console.log(balanceAmount);
+        return balanceAmount;
     }
 }
