@@ -10,6 +10,8 @@ window.onload = () => {
 function cbet() {
     let init = setInterval(getIframe, 1000);
 
+    getPortfolio();
+    checkPortfolio();
     amountToBet();
     
     function getIframe(){
@@ -17,7 +19,6 @@ function cbet() {
         iframe = iframe.contentWindow.document;
         let historyButton = iframe.querySelector(".bet-history");
         if (historyButton) {
-            console.log(historyButton);
             clearInterval(init);
             historyButton.addEventListener("click", ()=>{
                 let title = iframe.querySelector(".popup-title");
@@ -46,6 +47,29 @@ function cbet() {
             })
         }
     }
+
+}
+
+function checkPortfolio() {
+    chrome.storage.local.get(["portfolioHandler"], (result) => {
+        if (!result?.portfolioHandler) {
+            if (window.confirm(`Nous n'avons pas trouvé de bankroll associé à votre compte Cbet, voulez-vous rendre sur Bet-Analytix.com pour en ajouter un ?`)){
+                window.location.href = "https://app.bet-analytix.com/bankrolls";
+            }
+        }
+    });
+}
+
+function getPortfolio() {
+    const urlParam = window.location.href;
+    const url = new URL(urlParam);
+    const portfolio = url.searchParams?.get("portfolio");
+    if (portfolio) {
+        console.log("on enregistre le portfolio");
+        chrome.storage.local.set({"portfolioHandler": portfolio}, function() {
+            alert("Bankroll ajouté !");
+        });
+    }
 }
 
 function betAnalytix() {
@@ -57,10 +81,15 @@ function betAnalytix() {
     const result = url.searchParams?.get("result");
     const pick = url.searchParams?.get("pick");
 
+    // Add button to attribute bankroll
+    const button = document.querySelector(".button-action");
+    const buttonToBet = createbutton();
+    buttonToBet.addEventListener("click", Portfolio);
+    button.parentNode.insertBefore(buttonToBet, button);
+
     let init = name ? setInterval(clickForm, 500) : null;
 
     function clickForm() {
-        console.log("dans la boucle");
         const flexboxes = document.querySelector("div.rounded-lg.shadow-lg.bg-white.mb-4.p-5.flex.flex-1.items-center.overflow-hidden.cursor-pointer");
         if (flexboxes) {
             clearInterval(init);
@@ -94,7 +123,30 @@ function betAnalytix() {
             button.click();
         }, 1000);
     }
+
+    function Portfolio(){
+        console.log(window.location);
+        const pathname = window.location.pathname;
+        const portfolio = pathname.split("/gestion/");
+        saveInCbet(portfolio[1]);
+    }
+
+    function saveInCbet(portfolio_id) {
+        window.location.href = (`https://cbet4.gg/en/sportsbook/esports?portfolio=${portfolio_id}`);
+    }
+
 }
+
+function createbutton(){
+    const button2 = document.createElement("button");
+    button2.innerHTML = "Choisir cette bankroll pour Cbet";
+    button2.className = "button-action";
+    button2.style.marginRight = "10px";
+    button2.style.background = "#08ffc4"
+    button2.style.color = "black";
+    return button2;
+};
+
 
 function amountToBet() {
     const amount = getBalance();
