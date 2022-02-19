@@ -1,0 +1,23 @@
+{
+  "name": "cbet.gg",
+  "version": "1.0.0",
+  "description": "transfert Bet from Cbet to Bet-analytics",
+  "main": "cbets.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Falk0r/cbet.gg.git"
+  },
+  "author": "Falk0r",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Falk0r/cbet.gg/issues"
+  },
+  "homepage": "https://github.com/Falk0r/cbet.gg#readme",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "jest": "^27.2.4"
+  }
+}

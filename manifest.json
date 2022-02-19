@@ -2,7 +2,7 @@
 
     "manifest_version": 2,
     "name": "Cbet Extension",
-    "version": "1.6",
+    "version": "1.6.3",
   
     "description": "Transmet le bet sur bet-analytix",
   
@@ -15,7 +15,7 @@
   
     "content_scripts": [
       {
-        "matches": ["*://*.cbet4.gg/*","*://*.app.bet-analytix.com/*"],
+        "matches": ["*://*.cbet5.gg/*","*://*.app.bet-analytix.com/*"],
         "js": ["cbets.js"]
       }
     ]

@@ -1,9 +1,13 @@
 window.onload = () => {
+    intersection();
+} 
+
+const intersection = () => {
     const path = window.location.hostname;
     if (path === "app.bet-analytix.com") {
-        betAnalytix();
+         return betAnalytix();
     } else {
-        cbet();
+        return cbet();
     }
 }
 
@@ -65,7 +69,6 @@ function getPortfolio() {
     const url = new URL(urlParam);
     const portfolio = url.searchParams?.get("portfolio");
     if (portfolio) {
-        console.log("on enregistre le portfolio");
         chrome.storage.local.set({"portfolioHandler": portfolio}, function() {
             alert("Bankroll ajouté !");
         });
@@ -75,17 +78,25 @@ function getPortfolio() {
 function betAnalytix() {
     const url_string = window.location.href;
     const url = new URL(url_string);
+
+    if (url.searchParams?.get("name")) {
+        return addBet(url);
+    }
+    
+    // Add button to attribute bankroll
+    if (url.pathname.includes("/gestion/")) {
+        addButton();
+    } else {
+        listenNavbar();
+    }
+}
+
+function addBet(url) {
     const name = url.searchParams?.get("name");
     const odd = url.searchParams?.get("odd");
     const bet = url.searchParams?.get("bet");
     const result = url.searchParams?.get("result");
     const pick = url.searchParams?.get("pick");
-
-    // Add button to attribute bankroll
-    const button = document.querySelector(".button-action");
-    const buttonToBet = createbutton();
-    buttonToBet.addEventListener("click", Portfolio);
-    button.parentNode.insertBefore(buttonToBet, button);
 
     let init = name ? setInterval(clickForm, 500) : null;
 
@@ -123,18 +134,32 @@ function betAnalytix() {
             button.click();
         }, 1000);
     }
+}
 
-    function Portfolio(){
-        console.log(window.location);
-        const pathname = window.location.pathname;
-        const portfolio = pathname.split("/gestion/");
-        saveInCbet(portfolio[1]);
+function addButton() {
+    let initTitle = setInterval(getTitle, 1000);
+        
+    function getTitle(){
+        const title = document.querySelectorAll(".button-action");
+        if (title.length > 0) {
+            clearInterval(initTitle);
+            if(!checkButton()) {
+                const buttonToBet = createbutton();
+                buttonToBet.addEventListener("click", Portfolio);
+                title[0].parentNode.insertBefore(buttonToBet, title[0]);
+            }
+        } 
     }
+}
 
-    function saveInCbet(portfolio_id) {
-        window.location.href = (`https://cbet4.gg/en/sportsbook/esports?portfolio=${portfolio_id}`);
-    }
+function Portfolio(){
+    const pathname = window.location.pathname;
+    const portfolio = pathname.split("/gestion/");
+    saveInCbet(portfolio[1]);
+}
 
+function saveInCbet(portfolio_id) {
+    window.location.href = (`https://cbet4.gg/en/sportsbook/esports?portfolio=${portfolio_id}`);
 }
 
 function createbutton(){
@@ -144,6 +169,7 @@ function createbutton(){
     button2.style.marginRight = "10px";
     button2.style.background = "#08ffc4"
     button2.style.color = "black";
+    button2.id = "button-to-bankroll";
     return button2;
 };
 
@@ -151,22 +177,53 @@ function createbutton(){
 function amountToBet() {
     const amount = getBalance();
     const userInfo = document.querySelector(".user-info ul");
-    console.log("userInfo", userInfo);
     if (userInfo) {
         let li = document.createElement("li");
         li.classList.add("username");
         li.style.color = "white";
         li.innerHTML = `<span>Bet : </span><span class="amount">${(amount * 0.05).toFixed(2)}</span>`;
         userInfo.insertBefore(li, userInfo.firstChild);
+        return li;
     }
 }
 
 function getBalance() {
     const balance = document.querySelector(".balance .amount");
-    console.log("balance", balance);
     if (balance) {
         const balanceAmount = parseFloat(balance.textContent);
-        console.log(balanceAmount);
         return balanceAmount;
     }
 }
+
+function listenNavbar(){
+    const body = document.querySelector("#q-app");
+    //listen body change
+    body.addEventListener("DOMSubtreeModified", (e)=>{
+        if (getNavbar()) {
+            return betAnalytix();
+        }
+    }
+    )
+};
+
+function getNavbar(){
+    const buttons = document.querySelectorAll(".button-action");
+    if (buttons.length > 0) {
+        for (const button of buttons) {
+            if (button.innerText.includes("Ajouter pari")) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function checkButton() {
+    const button = document.querySelector("#button-to-bankroll");
+    if (button) {
+        return true;
+    }
+    return false;
+}
+
+// module.exports = {intersection, getBalance, amountToBet, createbutton, saveInCbet};
