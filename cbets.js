@@ -2,10 +2,11 @@ window.onload = () => {
     intersection();
 } 
 
-const intersection = () => {
+const intersection = async() => {
     const path = window.location.hostname;
     if (path === "app.bet-analytix.com") {
-         return betAnalytix();
+        let { betAnalytix } = await import("./betAnalytix");
+        return betAnalytix;
     } else {
         return cbet();
     }
