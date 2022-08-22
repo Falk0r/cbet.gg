@@ -1,18 +1,6 @@
-window.onload = () => {
-    intersection();
-} 
 
-const intersection = async() => {
-    const path = window.location.hostname;
-    if (path === "app.bet-analytix.com") {
-        let { betAnalytix } = await import("./betAnalytix");
-        return betAnalytix;
-    } else {
-        return cbet();
-    }
-}
 
-function cbet() {
+export function cbet() {
     let init = setInterval(getIframe, 1000);
 
     getPortfolio();
