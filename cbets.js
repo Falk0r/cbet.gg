@@ -15,7 +15,7 @@ function cbet() {
     let init = setInterval(getIframe, 1000);
 
     getPortfolio();
-    checkPortfolio();
+    const portfolio_id = checkPortfolio();
     amountToBet();
     
     function getIframe(){
@@ -45,7 +45,7 @@ function cbet() {
                     const oddResult = oddInfo[0].innerText;
                     const oddPick = oddInfo[1].querySelectorAll("span")[1].innerText;
                     console.log(oddResult, oddPick);
-                    const url = `https://app.bet-analytix.com/addbet/2?name=${name}&odd=${odd}&bet=${bet}&result=${oddResult}&pick=${oddPick}`;
+                    const url = `https://app.bet-analytix.com/addbet/${portfolio_id}?name=${name}&odd=${odd}&bet=${bet}&result=${oddResult}&pick=${oddPick}`;
                     window.open(url);
                 })
             })
@@ -54,14 +54,19 @@ function cbet() {
 
 }
 
-function checkPortfolio() {
-    chrome.storage.local.get(["portfolioHandler"], (result) => {
+async function checkPortfolio() {
+    let portfolio;
+    await chrome.storage.local.get(["portfolioHandler"], (result) => {
         if (!result?.portfolioHandler) {
             if (window.confirm(`Nous n'avons pas trouvé de bankroll associé à votre compte Cbet, voulez-vous rendre sur Bet-Analytix.com pour en ajouter un ?`)){
                 window.location.href = "https://app.bet-analytix.com/bankrolls";
             }
         }
+        console.log('result', result);
+        portfolio = result.portfolioHandler
     });
+    console.log('protfolio id', portfolio);
+    return portfolio;
 }
 
 function getPortfolio() {
@@ -159,7 +164,7 @@ function Portfolio(){
 }
 
 function saveInCbet(portfolio_id) {
-    window.location.href = (`https://cbet4.gg/en/sportsbook/esports?portfolio=${portfolio_id}`);
+    window.location.href = (`https://cbet5.gg/en/sportsbook/esports?portfolio=${portfolio_id}`);
 }
 
 function createbutton(){
